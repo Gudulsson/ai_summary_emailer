@@ -1,0 +1,32 @@
+name: Skicka morgonrapport
+
+on:
+  schedule:
+    - cron: '0 7 * * *' # Kör varje dag kl 07:00 UTC (09:00 svensk tid)
+  workflow_dispatch:     # Tillåter manuell körning från GitHub UI
+
+jobs:
+  send-report:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Klona repo
+        uses: actions/checkout@v3
+
+      - name: Installera Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '20'
+
+      - name: Installera beroenden
+        run: npm install
+
+      - name: Skapa .env från GitHub Secrets
+        run: |
+          echo "OPENAI_API_KEY=${{ secrets.OPENAI_API_KEY }}" >> .env
+          echo "EMAIL_USER=${{ secrets.EMAIL_USER }}" >> .env
+          echo "EMAIL_PASS=${{ secrets.EMAIL_PASS }}" >> .env
+          echo "EMAIL_TO=${{ secrets.EMAIL_TO }}" >> .env
+
+      - name: Kör skriptet
+        run: node index.js

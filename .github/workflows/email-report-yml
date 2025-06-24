@@ -1,0 +1,29 @@
+name: Daglig AI-sammanfattning
+
+on:
+  schedule:
+    - cron: "0 7 * * *"  # körs varje dag kl 07:00 svensk tid
+  workflow_dispatch:     # möjliggör manuell körning
+
+jobs:
+  send-summary:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Klona repo
+        uses: actions/checkout@v3
+
+      - name: Installera Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '20'
+
+      - name: Installera beroenden
+        run: npm install
+
+      - name: Kör scriptet
+        run: node index.js
+        env:
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+          EMAIL_USER: ${{ secrets.EMAIL_USER }}
+          EMAIL_PASS: ${{ secrets.EMAIL_PASS }}
+          EMAIL_TO: ${{ secrets.EMAIL_TO }}
