@@ -128,7 +128,7 @@ ${newsBlock}`;
         }
         a {
           font-weight: bold;
-          color: #90caf9;
+          color: #64b5f6;
           font-size: 22px;
           text-decoration: none;
         }
